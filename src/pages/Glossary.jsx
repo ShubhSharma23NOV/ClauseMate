@@ -1,124 +1,76 @@
-import { useState } from "react"
-import { motion } from "framer-motion"
-import DashboardLayout from "../components/layout/DashboardLayout"
-import { Search } from "lucide-react"
+import React from 'react';
+import { Search, FileText } from 'lucide-react';
+import DashboardLayout from '../components/layout/DashboardLayout';
 
-const legalTerms = [
+const commonTerms = [
   {
-    term: "Force Majeure",
-    definition:
-      "A clause that frees both parties from liability or obligation when an extraordinary event or circumstance beyond the control of the parties occurs.",
-    category: "Contract Law",
+    title: 'SAFE (Simple Agreement for Future Equity)',
+    description: 'An agreement for future equity',
   },
   {
-    term: "Indemnification",
-    definition:
-      "A contractual obligation of one party to compensate the loss incurred by the other party due to the relevant act of the indemnitor or any other party.",
-    category: "Contract Law",
+    title: 'Vesting',
+    description: 'The process of earning full ownership',
   },
   {
-    term: "Intellectual Property",
-    definition:
-      "A category of property that includes intangible creations of the human intellect, such as patents, trademarks, and copyrights.",
-    category: "IP Law",
+    title: 'Indemnity',
+    description: 'Protection against loss or damage',
   },
   {
-    term: "Non-Disclosure Agreement",
-    definition:
-      "A legal contract between at least two parties that outlines confidential material, knowledge, or information that the parties wish to share with one another.",
-    category: "Contract Law",
+    title: 'Due Diligence',
+    description: 'Investigation of a business',
   },
   {
-    term: "Term Sheet",
-    definition:
-      "A non-binding document outlining the basic terms and conditions under which an investment will be made.",
-    category: "Investment Law",
+    title: 'Term Sheet',
+    description: 'Summary of investment terms',
   },
-]
+  {
+    title: 'Cap Table',
+    description: 'Record of company ownership',
+  },
+];
 
-export default function Glossary() {
-  const [searchTerm, setSearchTerm] = useState("")
-  const [selectedCategory, setSelectedCategory] = useState("All")
-
-  const categories = ["All", ...new Set(legalTerms.map((term) => term.category))]
-
-  const filteredTerms = legalTerms.filter((term) => {
-    const matchesSearch = term.term
-      .toLowerCase()
-      .includes(searchTerm.toLowerCase())
-    const matchesCategory =
-      selectedCategory === "All" || term.category === selectedCategory
-    return matchesSearch && matchesCategory
-  })
-
+const Glossary = () => {
   return (
     <DashboardLayout>
-      <div className="space-y-6">
-        <div>
-          <h1 className="text-2xl font-semibold text-gray-900">Legal Glossary</h1>
-          <p className="mt-1 text-sm text-gray-500">
-            Search and browse common legal terms and their definitions.
-          </p>
+      <div className="flex flex-wrap justify-between gap-3 p-4">
+        <div className="flex min-w-72 flex-col gap-3">
+          <p className="text-[32px] font-bold">Legal Glossary</p>
+          <p className="text-sm text-[#4e6797]">Search for legal terms and definitions</p>
         </div>
+      </div>
 
-        {/* Search and Filter */}
-        <div className="flex flex-col sm:flex-row gap-4">
-          <div className="relative flex-1">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <Search className="h-5 w-5 text-gray-400" />
+      {/* Search Bar */}
+      <div className="px-4 py-3">
+        <div className="flex min-w-40 h-12 w-full">
+          <div className="flex w-full items-stretch rounded-lg h-full">
+            <div className="flex items-center justify-center pl-4 rounded-l-lg bg-[#e7ebf3]">
+              <Search className="w-6 h-6 text-[#4e6797]" />
             </div>
             <input
-              type="text"
-              className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"
-              placeholder="Search terms..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              placeholder="Search for legal terms"
+              className="w-full pl-2 pr-4 rounded-r-lg bg-[#e7ebf3] text-[#0e121b] placeholder:text-[#4e6797] focus:outline-none"
             />
           </div>
-          <select
-            className="block w-full sm:w-48 pl-3 pr-10 py-2 text-base border border-gray-300 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm rounded-md"
-            value={selectedCategory}
-            onChange={(e) => setSelectedCategory(e.target.value)}
-          >
-            {categories.map((category) => (
-              <option key={category} value={category}>
-                {category}
-              </option>
-            ))}
-          </select>
         </div>
+      </div>
 
-        {/* Terms List */}
-        <div className="bg-white shadow rounded-lg divide-y divide-gray-200">
-          {filteredTerms.map((term, index) => (
-            <motion.div
-              key={term.term}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
-              className="p-6"
-            >
-              <div className="flex items-start justify-between">
-                <div>
-                  <h3 className="text-lg font-medium text-gray-900">
-                    {term.term}
-                  </h3>
-                  <p className="mt-1 text-sm text-gray-500">{term.category}</p>
-                </div>
-              </div>
-              <div className="mt-4">
-                <p className="text-sm text-gray-700">{term.definition}</p>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-
-        {filteredTerms.length === 0 && (
-          <div className="text-center py-12">
-            <p className="text-gray-500">No terms found matching your search.</p>
+      {/* Common Terms Section */}
+      <h2 className="text-[22px] font-bold px-4 pb-3 pt-5">Common Legal Terms</h2>
+      <div className="grid grid-cols-[repeat(auto-fit,minmax(158px,1fr))] gap-3 p-4">
+        {commonTerms.map((term, index) => (
+          <div key={index} className="flex flex-1 gap-3 rounded-lg border border-[#d0d7e7] bg-[#f8f9fc] p-4 flex-col">
+            <div>
+              <FileText className="w-6 h-6 text-[#0e121b]" />
+            </div>
+            <div className="flex flex-col gap-1">
+              <h2 className="text-base font-bold">{term.title}</h2>
+              <p className="text-sm text-[#4e6797]">{term.description}</p>
+            </div>
           </div>
-        )}
+        ))}
       </div>
     </DashboardLayout>
-  )
-} 
+  );
+};
+
+export default Glossary; 
